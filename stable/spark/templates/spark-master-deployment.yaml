@@ -27,6 +27,7 @@ spec:
   ports:
     - port: {{ .Values.WebUi.ServicePort }}
       targetPort: {{ .Values.WebUi.ContainerPort }}
+      nodePort: {{ .Values.WebUi.NodePort }}
   selector:
     component: "{{ .Release.Name }}-{{ .Values.Master.Component }}"
   type: {{ .Values.Master.ServiceType }}
