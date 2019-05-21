@@ -1,0 +1,53 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: jupyter-svc
+spec:
+  type: NodePort
+  selector:
+    app: jupyter
+  ports:
+  - protocol: TCP
+    name: nb
+    port: 8328
+    targetPort: 8888
+    nodePort: 8888
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jupyter-pod
+  labels:
+    app: jupyter
+spec:
+  template:
+    metadata:
+      labels:
+        app: jupyter
+    spec:
+      containers:
+      - name: jupyter
+        imagePullPolicy: Always
+        command: ["start.sh"]
+        args: ["jupyter", "notebook", "--NotebookApp.token='testme'"]
+        image: "jupyter/pyspark-notebook" 
+        ports:
+        - containerPort: 8888
+        env:
+        - name: MASTER
+          value: "spark://spark-master:7077"
+        volumeMounts:
+        - mountPath: /home/jovyan/work
+          name: jupyter-data  
+      volumes:
+      - name: jupyter-data
+        hostPath:
+          path: /root
+
+  selector:
+    matchLabels:
+      app: jupyter
+
+  replicas: 1
+
