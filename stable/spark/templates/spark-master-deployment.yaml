@@ -11,6 +11,8 @@ spec:
   ports:
     - port: {{ .Values.Master.ServicePort }}
       targetPort: {{ .Values.Master.ContainerPort }}
+    - port: 8888 
+      targetPort: 8888 
   selector:
     component: "{{ .Release.Name }}-{{ .Values.Master.Component }}"
 ---
@@ -76,3 +78,21 @@ spec:
             value: {{ .Values.Master.ServicePort | quote }}
           - name: SPARK_MASTER_WEBUI_PORT
             value: {{ .Values.WebUi.ContainerPort | quote }}
+        - name: jupyter
+          imagePullPolicy: Always
+          command: ["start.sh"]
+          args: ["jupyter", "notebook", "--NotebookApp.token='testme'"]
+          image: "jupyter/pyspark-notebook" 
+          env:
+          - name: MASTER
+            value: "spark://spark-master:7077"
+          ports:
+          - containerPort: 8888
+          volumeMounts:
+          - mountPath: /home/jovyan/work
+            name: jupyter-data  
+      volumes:
+      - name: jupyter-data
+        hostPath:
+          path: /root
+
