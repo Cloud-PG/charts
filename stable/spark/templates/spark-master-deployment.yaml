@@ -10,8 +10,10 @@ metadata:
 spec:
   ports:
     - port: {{ .Values.Master.ServicePort }}
+      name: master
       targetPort: {{ .Values.Master.ContainerPort }}
     - port: 8888 
+      name: jupyter
       targetPort: 8888 
   selector:
     component: "{{ .Release.Name }}-{{ .Values.Master.Component }}"
