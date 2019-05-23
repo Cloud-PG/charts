@@ -62,8 +62,7 @@ spec:
       containers:
         - name: {{ template "master-fullname" . }}
           image: "{{ .Values.Master.Image }}:{{ .Values.Master.ImageTag }}"
-          command: ["/bin/sh","-c"]
-          args: ["echo $(hostname -i) {{ template "master-fullname" . }} >> /etc/hosts; {{ .Values.Spark.Path }}/bin/spark-class org.apache.spark.deploy.master.Master"]
+          args: ["master"]
           ports:
             - containerPort: {{ .Values.Master.ContainerPort }}
             - containerPort: {{ .Values.WebUi.ContainerPort }}
@@ -84,10 +83,7 @@ spec:
           imagePullPolicy: Always
           command: ["start.sh"]
           args: ["jupyter", "notebook", "--NotebookApp.token='testme'"]
-          image: "jupyter/pyspark-notebook" 
-          env:
-          - name: MASTER
-            value: "spark://spark-master:7077"
+          image: "cloudpg/spark-notebook:k8s" 
           ports:
           - containerPort: 8888
           volumeMounts:
