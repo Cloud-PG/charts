@@ -83,11 +83,11 @@ spec:
           imagePullPolicy: Always
           command: ["start.sh"]
           args: ["jupyter", "notebook", "--NotebookApp.token='testme'"]
-          image: "cloudpg/spark-notebook:k8s" 
+          image: "cloudpg/spark-notebook:k8s-3.6" 
           ports:
           - containerPort: 8888
           volumeMounts:
-          - mountPath: /home/jovyan/work
+          - mountPath: /home/jovyan/
             name: jupyter-data  
       volumes:
       - name: jupyter-data
