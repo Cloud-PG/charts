@@ -83,7 +83,7 @@ spec:
           imagePullPolicy: Always
           command: ["start.sh"]
           args: ["jupyter", "notebook", "--NotebookApp.token='testme'"]
-          image: "cloudpg/spark-notebook:k8s-3.6" 
+          image: "cloudpg/spark-notebook:k8s-py3.6" 
           ports:
           - containerPort: 8888
           volumeMounts:
