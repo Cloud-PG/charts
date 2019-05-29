@@ -82,7 +82,14 @@ spec:
         - name: jupyter
           imagePullPolicy: Always
           command: ["start.sh"]
-          args: ["jupyter", "notebook", "--NotebookApp.token='testme'"]
+          args: ["/usr/local/spark/bin/pyspark"]
+          env:
+            - name: PYSPARK_PYTHON
+              value: python3
+            - name: PYSPARK_DRIVER_PYTHON
+              value: ipython
+            - name: PYSPARK_DRIVER_PYTHON_OPTS
+              value: "notebook --NotebookApp.token='testme'"
           image: "cloudpg/spark-notebook:k8s-py3.6" 
           ports:
           - containerPort: 8888
