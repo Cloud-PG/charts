@@ -3,9 +3,9 @@ entries:
   spark:
   - apiVersion: v1
     appVersion: 1.5.1
-    created: 2019-05-30T11:26:08.593095082+02:00
+    created: 2019-05-30T11:30:17.076711645+02:00
     description: Fast and general-purpose cluster computing system.
-    digest: 79157223d59893ce6dbbf7d25ec8e6e6c0f50b37b976bc2cb5f8f8bf41f5b82d
+    digest: d68e8ad4a97b910a3faa0bba333da993327a0e9450aadc51acf2d80d24a834da
     home: http://spark.apache.org
     icon: http://spark.apache.org/images/spark-logo-trademark.png
     maintainers:
@@ -18,4 +18,4 @@ entries:
     urls:
     - https://cloud-pg.github.io/charts/spark-1.0.0.tgz
     version: 1.0.0
-generated: 2019-05-30T11:26:08.592703573+02:00
+generated: 2019-05-30T11:30:17.076311702+02:00
