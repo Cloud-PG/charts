@@ -6,6 +6,10 @@
 Spark:
   Path: "/opt/spark"
 
+externalIP:
+  enabled: false
+  ip: 
+
 Master:
   Name: master
   Image: "k8s.gcr.io/spark"

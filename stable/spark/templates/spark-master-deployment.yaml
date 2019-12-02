@@ -29,6 +29,9 @@ spec:
     - port: 8888 
       name: jupyter
       targetPort: 8888 
+  # TODO: if externaIP
+    #externalIPs:
+    #  - {{ }}
   selector:
     component: "{{ .Release.Name }}-{{ .Values.Master.Component }}"
 ---
@@ -45,6 +48,10 @@ spec:
   ports:
     - port: {{ .Values.WebUi.ServicePort }}
       targetPort: {{ .Values.WebUi.ContainerPort }}
+{{- if .Values.externalIP.enabled -}}
+  externalIPs:
+    - "{{ .Values.externalIP.ip  }}"
+{{- end }}
   selector:
     component: "{{ .Release.Name }}-{{ .Values.Master.Component }}"
   type: {{ .Values.Master.ServiceType }}
@@ -114,4 +121,5 @@ spec:
       - name: jupyter-data
         hostPath:
           path: /home/ubuntu
+          # TODO pass path to values
 
