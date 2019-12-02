@@ -29,10 +29,12 @@ spec:
     - port: 8888 
       name: jupyter
       targetPort: 8888
-{{- if .Values.externalIP.enabled -}}
+
+  {{- if .Values.externalIP.enabled -}}
   externalIPs:
     - "{{ .Values.externalIP.ip }}"
-{{- end }}
+  {{- end }}
+
   selector:
     component: "{{ .Release.Name }}-{{ .Values.Master.Component }}"
 ---
@@ -49,10 +51,12 @@ spec:
   ports:
     - port: {{ .Values.WebUi.ServicePort }}
       targetPort: {{ .Values.WebUi.ContainerPort }}
-{{- if .Values.externalIP.enabled -}}
+
+  {{- if .Values.externalIP.enabled -}}
   externalIPs:
     - "{{ .Values.externalIP.ip }}"
-{{- end }}
+  {{- end }}
+
   selector:
     component: "{{ .Release.Name }}-{{ .Values.Master.Component }}"
   type: {{ .Values.Master.ServiceType }}
