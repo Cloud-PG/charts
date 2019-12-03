@@ -23,10 +23,13 @@ metadata:
     component: "{{ .Release.Name }}-{{ .Values.Master.Component }}"
 spec:
   ports:
+    # TODO: manage service type from config
+    type: NodePort
     - port: {{ .Values.Master.ServicePort }}
       name: master
       targetPort: {{ .Values.Master.ContainerPort }}
     - port: 8888 
+      nodePort: 30888
       name: jupyter
       targetPort: 8888
 
@@ -48,8 +51,12 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     component: "{{ .Release.Name }}-{{ .Values.Master.Component }}"
 spec:
+  # TODO: manage service type from config
+  type: NodePort
+  #  type: {{ .Values.Master.ServiceType }}
   ports:
     - port: {{ .Values.WebUi.ServicePort }}
+      nodePort: {{ .Values.WebUi.NodePort }}
       targetPort: {{ .Values.WebUi.ContainerPort }}
 
   {{- if .Values.externalIP.enabled -}}
@@ -59,7 +66,6 @@ spec:
 
   selector:
     component: "{{ .Release.Name }}-{{ .Values.Master.Component }}"
-  type: {{ .Values.Master.ServiceType }}
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
