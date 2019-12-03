@@ -23,12 +23,14 @@ Master:
   # Set Master JVM memory. Default 1g
   # DaemonMemory: 1g
   ServiceType: NodePort
+  Jupyter:
+    NodePort: 30888
 
 WebUi:
   Name: webui
   ServicePort: 8080
   ContainerPort: 8080
-  NodePort: 30083
+  NodePort: 30808
 
 Worker:
   Name: worker

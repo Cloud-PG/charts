@@ -22,21 +22,21 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     component: "{{ .Release.Name }}-{{ .Values.Master.Component }}"
 spec:
+  type: NodePort
   ports:
     # TODO: manage service type from config
-    type: NodePort
     - port: {{ .Values.Master.ServicePort }}
       name: master
       targetPort: {{ .Values.Master.ContainerPort }}
     - port: 8888 
-      nodePort: 30888
+      nodePort: {{ .Values.Master.Jupyter.NodePort }}
       name: jupyter
       targetPort: 8888
 
-  {{- if .Values.externalIP.enabled -}}
+{{- if .Values.externalIP.enabled -}}
   externalIPs:
     - "{{ .Values.externalIP.ip }}"
-  {{- end }}
+{{- end }}
 
   selector:
     component: "{{ .Release.Name }}-{{ .Values.Master.Component }}"
@@ -59,10 +59,10 @@ spec:
       nodePort: {{ .Values.WebUi.NodePort }}
       targetPort: {{ .Values.WebUi.ContainerPort }}
 
-  {{- if .Values.externalIP.enabled -}}
+{{- if .Values.externalIP.enabled -}}
   externalIPs:
     - "{{ .Values.externalIP.ip }}"
-  {{- end }}
+{{- end }}
 
   selector:
     component: "{{ .Release.Name }}-{{ .Values.Master.Component }}"
@@ -76,7 +76,17 @@ metadata:
     release: {{ .Release.Name | quote }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     component: "{{ .Release.Name }}-{{ .Values.Master.Component }}"
+    app: spark-master
 spec:
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+    - labelSelector:
+        matchExpressions:
+        - key: app
+          operator: In
+          values:
+          - spark-master
+      topologyKey: kubernetes.io/hostname
   replicas: {{ default 1 .Values.Master.Replicas }}
   strategy:
     type: RollingUpdate
