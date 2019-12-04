@@ -31,17 +31,10 @@ spec:
     - port: 8888 
       nodePort: {{ .Values.Master.Jupyter.NodePort }}
       name: jupyter
-<<<<<<< HEAD
-      targetPort: 8888 
-  # TODO: if externaIP
-    #externalIPs:
-    #  - {{ }}
-=======
       targetPort: 8888
   externalIPs:
     - "{{ .Values.externalIP.ip }}"
 
->>>>>>> 2dd134cb00764542f2dc8cb04a70423b17ffb8da
   selector:
     component: "{{ .Release.Name }}-{{ .Values.Master.Component }}"
 ---
@@ -62,16 +55,9 @@ spec:
     - port: {{ .Values.WebUi.ServicePort }}
       nodePort: {{ .Values.WebUi.NodePort }}
       targetPort: {{ .Values.WebUi.ContainerPort }}
-<<<<<<< HEAD
-{{- if .Values.externalIP.enabled -}}
-  externalIPs:
-    - "{{ .Values.externalIP.ip  }}"
-{{- end }}
-=======
   externalIPs:
     - "{{ .Values.externalIP.ip }}"
 
->>>>>>> 2dd134cb00764542f2dc8cb04a70423b17ffb8da
   selector:
     component: "{{ .Release.Name }}-{{ .Values.Master.Component }}"
 ---
