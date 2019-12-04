@@ -35,7 +35,3 @@ Session.vim
 **/charts/*.tgz
 
 .history
-.circleci
-.github
-*.md
-incubator

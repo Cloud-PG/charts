@@ -22,16 +22,26 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     component: "{{ .Release.Name }}-{{ .Values.Master.Component }}"
 spec:
+  type: NodePort
   ports:
+    # TODO: manage service type from config
     - port: {{ .Values.Master.ServicePort }}
       name: master
       targetPort: {{ .Values.Master.ContainerPort }}
     - port: 8888 
+      nodePort: {{ .Values.Master.Jupyter.NodePort }}
       name: jupyter
+<<<<<<< HEAD
       targetPort: 8888 
   # TODO: if externaIP
     #externalIPs:
     #  - {{ }}
+=======
+      targetPort: 8888
+  externalIPs:
+    - "{{ .Values.externalIP.ip }}"
+
+>>>>>>> 2dd134cb00764542f2dc8cb04a70423b17ffb8da
   selector:
     component: "{{ .Release.Name }}-{{ .Values.Master.Component }}"
 ---
@@ -45,16 +55,25 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     component: "{{ .Release.Name }}-{{ .Values.Master.Component }}"
 spec:
+  # TODO: manage service type from config
+  type: NodePort
+  #  type: {{ .Values.Master.ServiceType }}
   ports:
     - port: {{ .Values.WebUi.ServicePort }}
+      nodePort: {{ .Values.WebUi.NodePort }}
       targetPort: {{ .Values.WebUi.ContainerPort }}
+<<<<<<< HEAD
 {{- if .Values.externalIP.enabled -}}
   externalIPs:
     - "{{ .Values.externalIP.ip  }}"
 {{- end }}
+=======
+  externalIPs:
+    - "{{ .Values.externalIP.ip }}"
+
+>>>>>>> 2dd134cb00764542f2dc8cb04a70423b17ffb8da
   selector:
     component: "{{ .Release.Name }}-{{ .Values.Master.Component }}"
-  type: {{ .Values.Master.ServiceType }}
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -65,7 +84,17 @@ metadata:
     release: {{ .Release.Name | quote }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     component: "{{ .Release.Name }}-{{ .Values.Master.Component }}"
+    app: spark-master
 spec:
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+    - labelSelector:
+        matchExpressions:
+        - key: app
+          operator: In
+          values:
+          - spark-master
+      topologyKey: kubernetes.io/hostname
   replicas: {{ default 1 .Values.Master.Replicas }}
   strategy:
     type: RollingUpdate
